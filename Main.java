@@ -65,7 +65,7 @@ class Menu {
         System.out.println("* 4 : FIRST MENU           --> *");
         System.out.println("********************************");
 
-        System.out.println("PLEASE ENTER YOUR CHOICE-->:");
+        System.out.println("PLEASE ENTER YOUR CHOICE: -->");
 
         int choice = in.nextInt();
 
@@ -93,11 +93,11 @@ class Menu {
 
     // ----------------------------------------------------
     private static void buyPart() {
+        CarpetShop.main();
     }
 
     // ----------------------------------------------------
     private static void searchPart() throws Exception {
-        CarpetFactory input = new CarpetFactory();
         CarpetFactory.main();
     }
 
@@ -301,5 +301,109 @@ class CarpetFactory {
         };
 
         return maps;
+    }
+}
+
+// ----------------------------------------------------
+class CarpetShop {
+
+    public static class Carpet {
+
+        private String name;
+        private int price;
+        private int area;
+        //---------------------------
+        public Carpet(String name, int area, int price) {
+            this.name = name;
+            this.area = area;
+            this.price = price;
+        }
+
+        //---------------------------
+        public void setPrice(int price) {
+            this.price = price;
+        }
+
+        //---------------------------
+        public int getPrice() {
+            return price;
+        }
+
+        //---------------------------
+        public void setArea(int area) {
+            this.area = area;
+        }
+
+        //---------------------------
+        public int getArea() {
+            return area;
+        }
+
+        //---------------------------
+        public String getName() {
+            return name;
+        }
+        //---------------------------
+    }
+
+    public static List<Carpet> findAffordableCarpets(int money, List<Carpet> carpets) {
+        int n = carpets.size();
+        int[] prices = new int[n];
+        int[] values = new int[n];
+        for (int i = 0; i < n; i++) {
+            Carpet carpet = carpets.get(i);
+            prices[i] = carpet.getPrice();
+            values[i] = carpet.getArea();
+        }
+        //---------------------------
+        int[][] dp = new int[n + 1][money + 1];
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= money; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 0;
+                } else if (prices[i - 1] <= j) {
+                    dp[i - 1][j] = values[i - 1];
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        //---------------------------
+        List<Carpet> affordableCarpets = new ArrayList<>();
+        int j = money;
+        for (int i = n; i > 0 && j > 0; i--) {
+            if (dp[i][j] != dp[i - 1][j]) {
+                Carpet carpet = carpets.get(i - 1);
+                affordableCarpets.add(carpet);
+                j -= carpet.getPrice();
+            }
+        }
+        return affordableCarpets;
+    }
+
+    public static void main() {
+
+        // Get the user's budget
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your budget: ---> ");
+        int money = scanner.nextInt();
+        List<Carpet> carpets = new ArrayList<>();
+        carpets.add(new Carpet("Carpet A", 2, 100)); // id, area, price
+        carpets.add(new Carpet("Carpet B", 3, 150));
+        carpets.add(new Carpet("Carpet C", 4, 200));
+        carpets.add(new Carpet("Carpet D", 5, 250));
+        carpets.add(new Carpet("Carpet E", 6, 280));
+        carpets.add(new Carpet("Carpet f", 8, 300));
+
+
+        List<Carpet> affordableCarpets = findAffordableCarpets(money, carpets);
+        if (affordableCarpets.isEmpty()) {
+            System.out.println("You cannot afford any carpets.");
+        } else {
+            System.out.println("You can afford the following carpets:");
+            for (Carpet carpet : affordableCarpets) {
+                System.out.println(carpet.getName() + "- Price: " + carpet.getPrice() + " Area: " + carpet.getArea());
+            }
+        }
     }
 }
