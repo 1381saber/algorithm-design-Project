@@ -1,18 +1,21 @@
 import java.util.*;
 
+
 public class Main {
     public static void main(String args[]) throws Exception {
+
         Menu input = new Menu();
         Menu.firstMenu();
         input.firstMenu();
+
     }
 }
 
+// ----------------------------------------------------
 class Menu {
     public static void firstMenu() throws Exception {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-
 
         Scanner in = new Scanner(System.in);
         // Display the menu
@@ -93,7 +96,9 @@ class Menu {
     }
 
     // ----------------------------------------------------
-    private static void searchPart() {
+    private static void searchPart() throws Exception {
+        CarpetFactory input = new CarpetFactory();
+        CarpetFactory.main();
     }
 
     // ----------------------------------------------------
@@ -115,14 +120,6 @@ class Menu {
         // Enter Matrix Data
         enterMatrixData(scan, matrix, matrixRow, matrixCol);
 
-//        int[][] graph = {
-//                {0, 1, 0, 1, 0},
-//                {1, 0, 1, 1, 1},
-//                {0, 1, 0, 1, 0},
-//                {1, 1, 1, 0, 1},
-//                {0, 1, 0, 1, 0}
-//        };
-
         int[] result = GraphColoring.graphColoring(matrix);
         System.out.println("Minimum number of colors required for carpet: " + result[0]);
         System.out.println("Colors assigned to regions: ");
@@ -135,7 +132,6 @@ class Menu {
     // ----------------------------------------------------
     public static void enterMatrixData(Scanner scan, int[][] matrix, int matrixRow, int matrixCol) {
         System.out.println("Enter Carpet Matrix Data : ");
-
         for (int i = 0; i < matrixRow; i++) {
             for (int j = 0; j < matrixCol; j++) {
                 matrix[i][j] = scan.nextInt();
@@ -145,8 +141,9 @@ class Menu {
 
     // ----------------------------------------------------
 }
-class GraphColoring {
 
+// ----------------------------------------------------
+class GraphColoring {
     // تابع رنگ کردن گراف
     public static int[] graphColoring(int[][] graph) {
         int n = graph.length; // تعداد گره‌ها (نواحی)
@@ -196,5 +193,113 @@ class GraphColoring {
             result[i + 1] = colors[i]; // رنگ اختصاص داده شده به هر یک از نواحی
         }
         return result;
+    }
+}
+
+// ----------------------------------------------------
+class CarpetFactory {
+    public static void main() throws Exception {
+        // Get the input carpet map
+        int[][] inputMap = getInputMap();
+        Scanner in = new Scanner(System.in);
+        // Get the available carpet maps in the system
+        int[][][] availableMaps = getAvailableMaps();
+
+        // Calculate the similarity between the input carpet map and the available carpet maps
+        double[] similarities = new double[availableMaps.length];
+        for (int i = 0; i < availableMaps.length; i++) {
+            similarities[i] = calculateSimilarity(inputMap, availableMaps[i]);
+        }
+
+        // Sort the carpet maps based on their similarity to the input carpet map
+        Integer[] sortedIndices = getSortedIndices(similarities);
+        // Display the three most similar carpet maps
+        int numToShow = 3;
+        for (int i = 0; i < numToShow; i++) {
+            int index = sortedIndices[i];
+            System.out.println("Similarity with map " + (index + 1) + ": " + similarities[index]);
+            printMap(availableMaps[index]);
+        }
+        System.out.println("****************************");
+        System.out.println("BACK TO MAIN MENU 1 ------>:");
+        int choice = in.nextInt();
+
+        switch (choice) {
+            case 1:
+                Menu.firstMenu();
+                break;
+            default:
+                System.out.println("INVALID CHOICE !");
+        }
+    }
+
+    // ----------------------------------------------------
+    private static int[][] getInputMap() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the dimensions of the carpet map (rows, columns):");
+        int rows = sc.nextInt();
+        int cols = sc.nextInt();
+
+        int[][] map = new int[rows][cols];
+        System.out.println("Enter the elements of the carpet map (one row at a time):");
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                map[i][j] = sc.nextInt();
+            }
+        }
+
+        return map;
+    }
+
+    // ----------------------------------------------------
+    private static void printMap(int[][] map) {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                System.out.print(map[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    // ----------------------------------------------------
+    public static Integer[] getSortedIndices(double[] arr) {
+        Integer[] indices = new Integer[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            indices[i] = i;
+        }
+        Arrays.sort(indices, Comparator.comparingInt(a -> (int) arr[a]));
+        return indices;
+    }
+
+    // ----------------------------------------------------
+    private static double calculateSimilarity(int[][] map1, int[][] map2) {
+        int dotProduct = 0;
+        int norm1 = 0;
+        int norm2 = 0;
+
+        for (int i = 0; i < map1.length; i++) {
+            for (int j = 0; j < map1[0].length; j++) {
+                dotProduct += map1[i][j] * map2[i][j];
+                norm1 += map1[i][j] * map1[i][j];
+                norm2 += map2[i][j] * map2[i][j];
+            }
+        }
+
+        double similarity = dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
+
+        return similarity;
+    }
+
+    // ----------------------------------------------------
+    private static int[][][] getAvailableMaps() {
+        int[][][] maps = {
+                {{1, 0, 1}, {0, 1, 0}, {1, 0, 1}},
+                {{1, 1, 0}, {0, 0, 1}, {0, 1, 0}},
+                {{1, 1, 1}, {1, 0, 1}, {0, 0, 0}},
+                {{0, 0, 1}, {0, 1, 0}, {1, 0, 1}}
+        };
+
+        return maps;
     }
 }
