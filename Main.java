@@ -314,6 +314,7 @@ class CarpetShop {
         private String name;
         private int price;
         private int area;
+
         //---------------------------
         public Carpet(String name, int area, int price) {
             this.name = name;
@@ -411,91 +412,190 @@ class CarpetShop {
 }
 
 // ----------------------------------------------------
- class NavigationSystem {
+//class NavigationSystem1 {
+//
+//    // Define the graph as an adjacency list
+//    static Map<Integer, List<Edge>> graph = new HashMap<>();
+//
+//    // Define the Edge class
+//    static class Edge {
+//        int to;
+//        double weight;
+//
+//        Edge(int to, double weight) {
+//            this.to = to;
+//            this.weight = weight;
+//        }
+//    }
+//
+//    // Dijkstra's algorithm implementation
+//    static Map<Integer, Double> dijkstra(int start) {
+//        Map<Integer, Double> dist = new HashMap<>();
+//        PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparingDouble(e -> e.weight));
+//        pq.offer(new Edge(start, 0));
+//        while (!pq.isEmpty()) {
+//            Edge curr = pq.poll();
+//            if (dist.containsKey(curr.to)) continue;
+//            dist.put(curr.to, curr.weight);
+//            for (Edge e : graph.getOrDefault(curr.to, Collections.emptyList())) {
+//                if (!dist.containsKey(e.to)) {
+//                    pq.offer(new Edge(e.to, curr.weight + e.weight));
+//                }
+//            }
+//        }
+//        return dist;
+//    }
+//
+//    public static void main() {
+//        // Create thegraph as an adjacency list
+//        graph.put(0, Arrays.asList(new Edge(1, 4), new Edge(2, 2)));
+//        graph.put(1, Arrays.asList(new Edge(0, 4), new Edge(2, 5), new Edge(3, 2)));
+//        graph.put(2, Arrays.asList(new Edge(0, 2), new Edge(1, 5), new Edge(3, 1)));
+//        graph.put(3, Arrays.asList(new Edge(1, 2), new Edge(2, 1)));
+//
+//        // Get the user's current location
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.print("Enter your current location (intersection number): ");
+//        int start = scanner.nextInt();
+//
+//        // Find the shortest path to all factory stores using Dijkstra's algorithm
+//        Map<Integer, Double> distances = dijkstra(start);
+//
+//        // Find the nearest factory store
+//        double minDistance = Double.MAX_VALUE;
+//        int nearestStore = -1;
+//        for (int store : new int[]{4, 5, 6}) { // Assume there are three factory stores with IDs 4, 5, and 6
+//            if (distances.containsKey(store) && distances.get(store) < minDistance) {
+//                minDistance = distances.get(store);
+//                nearestStore = store;
+//            }
+//        }
+//
+//        // Print the nearest factory store and its path
+//        if (nearestStore != -1) {
+//            System.out.println("The nearest factory store is " + nearestStore + " with a distance of " + minDistance + ".");
+//            System.out.println("The path to the nearest store is: ");
+//            int curr = nearestStore;
+//            List<Integer> path = new ArrayList<>();
+//            path.add(curr);
+//            while (curr != start) {
+//                for (Edge e : graph.get(curr)) {
+//                    if (distances.containsKey(e.to) && Math.abs(distances.get(curr) - distances.get(e.to) - e.weight) < 1e-9) {
+//                        curr = e.to;
+//                        path.add(curr);
+//                        break;
+//                    }
+//                }
+//            }
+//            Collections.reverse(path);
+//            System.out.println("Start from intersection " + start + ".");
+//            for (int i = 0; i < path.size() - 1; i++) {
+//                System.out.println("Go to intersection " + path.get(i) + " and then to intersection " + path.get(i + 1) + ".");
+//            }
+//        } else {
+//            System.out.println("There are no factory stores nearby.");
+//        }
+//
+//        // Close the scanner
+//        scanner.close();
+//    }
+//}
 
-    // Define the graph as an adjacency list
-    static Map<Integer, List<Edge>> graph = new HashMap<>();
 
-    // Define the Edge class
-    static class Edge {
-        int to;
-        double weight;
-
-        Edge(int to, double weight) {
-            this.to = to;
-            this.weight = weight;
-        }
-    }
-
-    // Dijkstra's algorithm implementation
-    static Map<Integer, Double> dijkstra(int start) {
-        Map<Integer, Double> dist = new HashMap<>();
-        PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparingDouble(e -> e.weight));
-        pq.offer(new Edge(start, 0));
-        while (!pq.isEmpty()) {
-            Edge curr = pq.poll();
-            if (dist.containsKey(curr.to)) continue;
-            dist.put(curr.to, curr.weight);
-            for (Edge e : graph.getOrDefault(curr.to, Collections.emptyList())) {
-                if (!dist.containsKey(e.to)) {
-                    pq.offer(new Edge(e.to, curr.weight + e.weight));
-                }
-            }
-        }
-        return dist;
-    }
+class NavigationSystem {
+    static double[][] graph = {
+            {0, 2.5, 3.2, 0, 0},
+            {2.5, 0, 0, 1.8, 0},
+            {3.2, 0, 0, 2.1, 4.7},
+            {0, 1.8, 2.1, 0, 2.3},
+            {0, 0, 4.7, 2.3, 0}
+    };
 
     public static void main() {
-        // Create thegraph as an adjacency list
-        graph.put(0, Arrays.asList(new Edge(1, 4), new Edge(2, 2)));
-        graph.put(1, Arrays.asList(new Edge(0, 4), new Edge(2, 5), new Edge(3, 2)));
-        graph.put(2, Arrays.asList(new Edge(0, 2), new Edge(1, 5), new Edge(3, 1)));
-        graph.put(3, Arrays.asList(new Edge(1, 2), new Edge(2, 1)));
-
-        // Get the user's current location
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter your current location (intersection number): ");
-        int start = scanner.nextInt();
 
-        // Find the shortest path to all factory stores using Dijkstra's algorithm
-        Map<Integer, Double> distances = dijkstra(start);
+        System.out.println("Enter your current location coordinates (x,y):");
+        double startX = scanner.nextDouble();
+        double startY = scanner.nextDouble();
 
-        // Find the nearest factory store
-        double minDistance = Double.MAX_VALUE;
-        int nearestStore = -1;
-        for (int store : new int[]{4, 5, 6}) { // Assume there are three factory stores with IDs 4, 5, and 6
-            if (distances.containsKey(store) && distances.get(store) < minDistance) {
-                minDistance = distances.get(store);
-                nearestStore = store;
+        // Find the closest intersection to the user's location
+        int startIdx = findClosestIntersection(startX, startY);
+
+        // Find the shortest path from the closest intersection to the factory
+        int endIdx = findClosestBranch();
+        List<Integer> shortestPath = dijkstra(graph, startIdx, endIdx);
+
+        // Print the result
+        System.out.println("The closest branch to your location is branch " + (endIdx + 1));
+        System.out.println("The shortest path to get there is: ");
+        for (int i = 0; i < shortestPath.size(); i++) {
+            System.out.print(shortestPath.get(i) + 1);
+            if (i != shortestPath.size() - 1) {
+                System.out.print(" -> ");
             }
         }
 
-        // Print the nearest factory store and its path
-        if (nearestStore!= -1) {
-            System.out.println("The nearest factory store is " + nearestStore + " with a distance of " + minDistance + ".");
-            System.out.println("The path to the nearest store is: ");
-            int curr = nearestStore;
-            List<Integer> path = new ArrayList<>();
-            path.add(curr);
-            while (curr != start) {
-                for (Edge e : graph.get(curr)) {
-                    if (distances.containsKey(e.to) && Math.abs(distances.get(curr) - distances.get(e.to) - e.weight) < 1e-9) {
-                        curr = e.to;
-                        path.add(curr);
-                        break;
+    }
+
+    // Find the closest intersection to the user's location
+    public static int findClosestIntersection(double startX, double startY) {
+        int closestIdx = 0;
+        double closestDist = Double.MAX_VALUE;
+
+        for (int i = 0; i < graph.length; i++) {
+            double dist = Math.sqrt(Math.pow(startX - i, 2) + Math.pow(startY - graph[i][0], 2));
+            if (dist < closestDist) {
+                closestIdx = i;
+                closestDist = dist;
+            }
+        }
+
+        return closestIdx;
+    }
+
+    // Find the closest branch to the user's location
+    public static int findClosestBranch() {
+        // In this example, we assume that the nearest branch is vertex 4
+        return 3;
+    }
+
+    // Find the shortest path between two vertices using Dijkstra's algorithm
+    public static List<Integer> dijkstra(double[][] graph, int start, int end) {
+        int n = graph.length;
+        boolean[] visited = new boolean[n];
+        double[] dist = new double[n];
+        int[] prev = new int[n];
+        PriorityQueue<Integer> pq = new PriorityQueue<>(n, (a, b) -> Double.compare(dist[a], dist[b]));
+
+        Arrays.fill(dist, Double.MAX_VALUE);
+        Arrays.fill(prev, -1);
+        dist[start] = 0;
+        pq.offer(start);
+
+        while (!pq.isEmpty()) {
+            int curr = pq.poll();
+            visited[curr] = true;
+
+            for (int neighbor = 0; neighbor < n; neighbor++) {
+                double weight = graph[curr][neighbor];
+                if (weight > 0 && !visited[neighbor]) {
+                    double newDist = dist[curr] + weight;
+                    if (newDist < dist[neighbor]) {
+                        dist[neighbor] = newDist;
+                        prev[neighbor] = curr;
+                        pq.offer(neighbor);
                     }
                 }
             }
-            Collections.reverse(path);
-            System.out.println("Start from intersection " + start + ".");
-            for (int i = 0; i < path.size() - 1; i++) {
-                System.out.println("Go to intersection " + path.get(i) + " and then to intersection " + path.get(i + 1) + ".");
-            }
-        } else {
-            System.out.println("There are no factory stores nearby.");
         }
 
-        // Close the scanner
-        scanner.close();
+        List<Integer> path = new ArrayList<>();
+        int curr = end;
+        while (curr != -1) {
+            path.add(0, curr);
+            curr = prev[curr];
+        }
+
+        return path;
     }
 }
