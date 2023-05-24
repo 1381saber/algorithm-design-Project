@@ -302,7 +302,27 @@ class CarpetFactory {
 
         return maps;
     }
+
+
+    public static int[][] createRandomMatrix() {
+        int[][] randomMatrix = new int[2][2];
+        Random random = new Random();
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                double rand = random.nextDouble();
+                if (rand < 0.5) {
+                    randomMatrix[i][j] = 0;
+                } else {
+                    randomMatrix[i][j] = 1;
+                }
+            }
+        }
+
+        return randomMatrix;
+    }
 }
+// ----------------------------------------------------
 
 // ----------------------------------------------------
 class CarpetShop {
