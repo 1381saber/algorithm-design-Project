@@ -1,6 +1,5 @@
 import java.util.*;
 
-
 public class Main {
     public static void main(String args[]) throws Exception {
 
@@ -26,7 +25,6 @@ class Menu {
         System.out.println("* 3 : PROGRAMMER INFO  --> *");
         System.out.println("* 4 : EXIT !           --> *");
         System.out.println("****************************");
-
         System.out.println("PLEASE ENTER YOUR CHOICE-->:");
 
         int choice = in.nextInt();
@@ -305,11 +303,11 @@ class CarpetFactory {
 
 
     public static int[][] createRandomMatrix() {
-        int[][] randomMatrix = new int[2][2];
+        int[][] randomMatrix = new int[300][400];
         Random random = new Random();
 
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
+        for (int i = 0; i < 300; i++) {
+            for (int j = 0; j < 400; j++) {
                 double rand = random.nextDouble();
                 if (rand < 0.5) {
                     randomMatrix[i][j] = 0;
@@ -324,7 +322,6 @@ class CarpetFactory {
 }
 // ----------------------------------------------------
 
-// ----------------------------------------------------
 class CarpetShop {
 
     public static class Carpet {
@@ -428,52 +425,69 @@ class CarpetShop {
         }
     }
 }
-
 // ----------------------------------------------------
+
+class eachNode {
+    int vertexNum;
+    int name;
+    Boolean isDepartment;
+
+    public eachNode(int vertexNum, Boolean isDepartment, int name) {
+        this.vertexNum = vertexNum;
+        this.name = name;
+        this.isDepartment = isDepartment;
+    }
+
+    @Override
+    public String toString() {
+        return "eachNode{" +
+                "vertexNum=" + vertexNum +
+                ", name=" + name +
+                ", isDepartment=" + isDepartment +
+                '}';
+    }
+}
+// ----------------------------------------------------
+
 class ShortestPath {
+
+    static ArrayList<eachNode> vertices = new ArrayList<>();
+
+
+    public ShortestPath() {
+
+        eachNode v0 = new eachNode(0, false, 0);
+        eachNode v1 = new eachNode(1, true, 1);
+        eachNode v2 = new eachNode(2, false, 2);
+        eachNode v3 = new eachNode(3, false, 3);
+        eachNode v4 = new eachNode(4, false, 4);
+        eachNode v5 = new eachNode(5, true, 5);
+        eachNode v6 = new eachNode(6, false, 6);
+        eachNode v7 = new eachNode(7, true, 7);
+        eachNode v8 = new eachNode(8, false, 8);
+
+        vertices.add(v0);
+        vertices.add(v1);
+        vertices.add(v2);
+        vertices.add(v3);
+        vertices.add(v4);
+        vertices.add(v5);
+        vertices.add(v6);
+        vertices.add(v7);
+        vertices.add(v8);
+
+
+    }
 
     static final int V = 9;
 
-    class eachNode {
-        int vertexNum;
-        Boolean isDepartment;
-        static ArrayList<ShortestPath.eachNode> vertices = new ArrayList<>();
-
-        public eachNode(int vertexNum, Boolean isDepartment) {
-            this.vertexNum = vertexNum;
-            this.isDepartment = isDepartment;
-
-
-            ShortestPath.eachNode v0 = new ShortestPath.eachNode(0, false);
-            ShortestPath.eachNode v1 = new ShortestPath.eachNode(1, true);
-            ShortestPath.eachNode v2 = new ShortestPath.eachNode(2, false);
-            ShortestPath.eachNode v3 = new ShortestPath.eachNode(3, true);
-            ShortestPath.eachNode v4 = new ShortestPath.eachNode(4, false);
-            ShortestPath.eachNode v5 = new ShortestPath.eachNode(5, true);
-            ShortestPath.eachNode v6 = new ShortestPath.eachNode(6, false);
-            ShortestPath.eachNode v7 = new ShortestPath.eachNode(7, true);
-            ShortestPath.eachNode v8 = new ShortestPath.eachNode(8, false);
-
-            vertices.add(v0);
-            vertices.add(v1);
-            vertices.add(v2);
-            vertices.add(v3);
-            vertices.add(v4);
-            vertices.add(v5);
-            vertices.add(v6);
-            vertices.add(v7);
-            vertices.add(v8);
-
-
-        }
-    }
 
     int minDistance(ArrayList<eachNode> dist, Boolean[] sptSet) {
         // Initialize min value
         int min = Integer.MAX_VALUE, min_index = -1;
 
         for (int v = 0; v < V; v++)
-            if (sptSet[v] == false && dist.get(v).vertexNum <= min) {
+            if (!sptSet[v] && dist.get(v).vertexNum <= min) {
                 min = dist.get(v).vertexNum;
                 min_index = v;
             }
@@ -488,13 +502,43 @@ class ShortestPath {
                 "Vertex \t\t Distance from Source");
         for (int i = 0; i < V; i++)
             System.out.println(i + " \t\t " + dist.get(i).vertexNum);
+
+
+        eachNode[] sorted = new eachNode[dist.size()];
+        int i = 0;
+        for (eachNode e : dist) {
+            sorted[i] = e;
+            i++;
+        }
+
+        for (i = 0; i < V; i++)
+            for (int j = 0; j < V; j++) {
+                if (sorted[i].vertexNum < sorted[j].vertexNum) {
+
+                    eachNode temp = sorted[i];
+                    sorted[i] = sorted[j];
+                    sorted[j] = temp;
+
+                }
+
+            }
+
+
+        for (i = 0; i < V; i++) {
+            if (sorted[i].isDepartment) {
+                System.out.printf("the answer is : " + sorted[i].toString());
+                break;
+            }
+
+        }
+
     }
 
     // Function that implements Dijkstra's single source
     // shortest path algorithm for a graph represented using
     // adjacency matrix representation
     void dijkstra(int graph[][], int src) {
-        ArrayList<ShortestPath.eachNode> dist = eachNode.vertices;
+        ArrayList<eachNode> dist = vertices;
 
         Boolean sptSet[] = new Boolean[V];
 
@@ -558,3 +602,4 @@ class ShortestPath {
         t.dijkstra(graph, src);
     }
 }
+// ----------------------------------------------------
