@@ -52,7 +52,6 @@ class Menu {
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
-
         Scanner in = new Scanner(System.in);
         // Display the menu
         System.out.println("-------KOOHDEL CARPET SHOP------");
@@ -406,12 +405,24 @@ class CarpetShop {
         System.out.print("Enter your budget: ---> ");
         int money = scanner.nextInt();
         List<Carpet> carpets = new ArrayList<>();
-        carpets.add(new Carpet("Carpet A", 2, 100)); // id, area, price
-        carpets.add(new Carpet("Carpet B", 3, 150));
-        carpets.add(new Carpet("Carpet C", 4, 200));
-        carpets.add(new Carpet("Carpet D", 5, 250));
-        carpets.add(new Carpet("Carpet E", 6, 280));
-        carpets.add(new Carpet("Carpet f", 8, 300));
+        carpets.add(new Carpet("Carpet A1", 2, 100)); // id, area, price
+        carpets.add(new Carpet("Carpet B1", 3, 150));
+        carpets.add(new Carpet("Carpet C1", 4, 200));
+        carpets.add(new Carpet("Carpet D1", 5, 250));
+        carpets.add(new Carpet("Carpet E1", 6, 280));
+        carpets.add(new Carpet("Carpet F1", 8, 300));
+        carpets.add(new Carpet("Carpet A2", 2, 100)); // id, area, price
+        carpets.add(new Carpet("Carpet B2", 3, 150));
+        carpets.add(new Carpet("Carpet C2", 4, 200));
+        carpets.add(new Carpet("Carpet D2", 5, 250));
+        carpets.add(new Carpet("Carpet E2", 6, 280));
+        carpets.add(new Carpet("Carpet F2", 8, 300));
+        carpets.add(new Carpet("Carpet A3", 2, 100)); // id, area, price
+        carpets.add(new Carpet("Carpet B3", 3, 150));
+        carpets.add(new Carpet("Carpet C3", 4, 200));
+        carpets.add(new Carpet("Carpet D3", 5, 250));
+        carpets.add(new Carpet("Carpet E3", 6, 280));
+        carpets.add(new Carpet("Carpet F3", 8, 300));
 
 
         List<Carpet> affordableCarpets = findAffordableCarpets(money, carpets);
@@ -539,7 +550,6 @@ class ShortestPath {
     // adjacency matrix representation
     void dijkstra(int graph[][], int src) {
         ArrayList<eachNode> dist = vertices;
-
         Boolean sptSet[] = new Boolean[V];
 
         // Initialize all distances as INFINITE and stpSet[]
@@ -575,8 +585,6 @@ class ShortestPath {
                         && dist.get(u).vertexNum + graph[u][v] < dist.get(v).vertexNum)
                     dist.get(v).vertexNum = dist.get(u).vertexNum + graph[u][v];
         }
-
-        // print the constructed distance array
         printSolution(dist);
     }
 
@@ -584,6 +592,8 @@ class ShortestPath {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter your current location :");
         int src = scanner.nextInt();
+
+
 
         int graph[][]
                 = new int[][]{
